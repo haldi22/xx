@@ -1,13 +1,22 @@
--- À mettre dans un fichier server.lua
 Citizen.CreateThread(function()
-    local resourceCount = GetNumResources()
-    print("^3[Diagnostic]^7 Nombre total de ressources : " .. resourceCount)
-
-    for i = 0, resourceCount - 1 do
-        local name = GetResourceName(i)
-        local state = GetResourceState(name)
-        
-        -- On affiche le nom et si elle est lancée ou non
-        print(string.format("^5[%d]^7 Ressource : ^2%s^7 | État : ^3%s^7", i, name, state))
+    -- On tente de récupérer les fonctions différemment
+    local getResCount = GetNumResources
+    local getResName = GetResourceByFindIndex -- Alternative à GetResourceName
+    
+    if not getResName then
+        -- Si même ça ça échoue, on liste les ressources chargées en mémoire
+        print("^1[Erreur]^7 API standard bloquée. Tentative de lecture mémoire...")
+        for name, _ in pairs(_G) do
+            if type(_G[name]) == "table" and _G[name].exports then
+                print("^3[Export Trouvé]^7 " .. name)
+            end
+        end
+    else
+        local count = getResCount()
+        print("^2[Succès]^7 Connexion établie. Ressources : " .. count)
+        for i = 0, count - 1 do
+            local name = getResName(i)
+            print("ID: " .. i .. " | Nom: " .. tostring(name))
+        end
     end
 end)
