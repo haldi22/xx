@@ -1,4 +1,13 @@
-for i = 0, GetNumResources() - 1 do
-    local resourceName = GetResourceName(i)
-    print("Ressource trouvée : " .. resourceName)
-end
+-- À mettre dans un fichier server.lua
+Citizen.CreateThread(function()
+    local resourceCount = GetNumResources()
+    print("^3[Diagnostic]^7 Nombre total de ressources : " .. resourceCount)
+
+    for i = 0, resourceCount - 1 do
+        local name = GetResourceName(i)
+        local state = GetResourceState(name)
+        
+        -- On affiche le nom et si elle est lancée ou non
+        print(string.format("^5[%d]^7 Ressource : ^2%s^7 | État : ^3%s^7", i, name, state))
+    end
+end)
